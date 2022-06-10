@@ -1,0 +1,85 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-image: url(img/Bigstock_268757116.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.container {
+  min-height: 90vh;
+  background-color: #86cdea;
+  border-radius: 1rem;
+}
+
+.clearAllButton {
+  max-height: 50% !important;
+}
+
+#todo-inp {
+  max-width: 95% !important;
+}
+
+ul {
+  max-width: 80% !important;
+}
+
+.input-group {
+  border: 3px solid rgb(114, 113, 113);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 0.5rem;
+}
+
+.input-group input {
+  border: none;
+  outline: none;
+  width: 90%;
+  height: 2.6rem;
+  background-color: transparent;
+  padding-left: 1rem;
+}
+
+.fa-check:hover {
+  cursor: pointer;
+}
+
+.card,
+.list-group-item {
+  border: none;
+  background-color: transparent;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.input-group button {
+  border: none;
+  background-color: transparent;
+}
+
+.to-do .card input {
+  width: 100%;
+  padding-left: 5px;
+  outline: none;
+}
+
+.to-do .card button {
+  border: none;
+  max-width: fit-content;
+}
+
+.input-container .to-do .card input {
+  border: none;
+  background-color: transparent;
+}
+
+.line-through {
+  text-decoration: line-through;
+  color: red;
+}
