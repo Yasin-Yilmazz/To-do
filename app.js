@@ -5,11 +5,19 @@ const taskCount = document.getElementById("task-count");
 const todoInput = document.getElementById("todo");
 const todoItem = document.getElementById("todo-item");
 const todoCards = document.querySelector(".to-do");
-
+const todoUl = document.querySelector(".todo-ul");
 // VARIABLES
 let dayOfWeekName, dayOfMonth, monthName, taskNumber;
 let isEditable = true;
-let isDone = false;
+let todos = JSON.parse(localStorage.getItem("todos")) || [];
+
+renderSavedTodos();
+
+function renderSavedTodos() {
+  todos.forEach((todo) => {
+    createLiElement(todo);
+  });
+}
 
 // GET DATES
 let dayOfWeekDigit = new Date().getDay();
@@ -42,22 +50,38 @@ window.onload = () => {
   todoInput.focus();
 };
 
+// set add button
 container.addEventListener("click", (e) => {
-  e.preventDefault();
   if (e.target.classList.contains("fa-plus")) {
-    createCard(e);
+    // createCard(e);
+    if (!todoInput.value) {
+      alert("Please enter your todo");
+    } else {
+      const todoObject = {
+        id: d.getTime(),
+        isDone: false,
+        content: todoInput.value,
+      };
+      todos.push(todoObject);
+
+      localStorage.setItem("todos", JSON.stringify(todos));
+
+      createLiElement(todoObject);
+      todoInput.value = "";
+    }
+    console.log(id, isDone, content);
   }
   todoInput.addEventListener("keydown", (e) => {
     if (e.keyCode === 13) {
-      createCard(e);
+      e.target.classList.contains(".fa-plus").click();
     }
   });
 
   if (e.target.classList.contains("edit-btn")) {
-    editBtn();
+    // editBtn();
   }
   if (e.target.classList.contains("fa-trash")) {
-    removeTodo(e);
+    // removeTodo(e);
   }
   if (e.target.classList.contains("clearAllButton")) {
     removeAll();
@@ -85,60 +109,6 @@ container.addEventListener("click", (e) => {
   }
 });
 
-// CreateCard
-const createCard = (e) => {
-  const card = document.createElement("div");
-  card.className = "card";
-
-  const ul = document.createElement("ul");
-  ul.className = "list-group list-group-flush";
-
-  const li = document.createElement("li");
-  li.className = "list-group-item d-flex flex-row justify-content-between";
-
-  const btnCheck = document.createElement("button");
-  btnCheck.className = "btn";
-
-  const check = document.createElement("i");
-  check.className = "fa-solid fa-check text-success";
-
-  const input = document.createElement("input");
-  input.setAttribute("disabled", "");
-  input.className = "todo-item";
-  input.id = "todo-item";
-  input.type = "text";
-
-  const btnEdit = document.createElement("button");
-  btnEdit.className = "btn btn-warning mx-2 edit-btn";
-  btnEdit.id = "edit-btn";
-  btnEdit.textContent = "EDIT";
-
-  const btnTrash = document.createElement("button");
-  btnTrash.className = "btn todo-item-delete text-danger";
-  btnTrash.id = "todo-item-delete";
-
-  const trash = document.createElement("i");
-  trash.className = "fa-solid fa-trash";
-  btnCheck.appendChild(check);
-  btnTrash.appendChild(trash);
-  li.appendChild(btnCheck);
-  li.appendChild(input);
-  li.appendChild(btnEdit);
-  li.appendChild(btnTrash);
-  ul.appendChild(li);
-  card.appendChild(ul);
-  const todoItem = document.getElementById("todo-item");
-  if (todoInput.value != "") {
-    todoCards.appendChild(card);
-    todoItem.value = todoInput.value;
-    todoInput.value = "";
-  } else {
-    alert("Input can not be empty");
-  }
-
-  //   editBtn();
-};
-
 const editBtn = () => {
   const todoItem = document.getElementById("todo-item");
   const editButton = document.getElementById("edit-btn");
@@ -163,22 +133,40 @@ const removeAll = () => {
   todoCards.remove();
 };
 
-const checkIsDone = () => {
-  const todoItem = document.getElementById("todo-item");
-  const check = document.querySelector(".fa-check");
-  if (!isDone) {
-    check.classList.remove("fa-check");
-    todoItem.classList.add("line-through");
-    check.classList.add("fa-x");
-    check.classList.add("text-danger");
-    isDone = false;
-    console.log(isDone);
-  } else {
-    check.classList.add("fa-check");
-    todoItem.classList.remove("line-through");
-    check.classList.remove("fa-x");
-    check.classList.remove("text-danger");
-    isDone = true;
-    console.log(isDone);
-  }
-};
+// const checkIsDone = () => {
+//   const todoItem = document.getElementById("todo-item");
+//   const check = document.querySelector(".fa-check");
+//   if (!isDone) {
+//     check.classList.remove("fa-check");
+//     todoItem.classList.add("line-through");
+//     check.classList.add("fa-x");
+//     check.classList.add("text-danger");
+//     isDone = false;
+//     console.log(isDone);
+//   } else {
+//     check.classList.add("fa-check");
+//     todoItem.classList.remove("line-through");
+//     check.classList.remove("fa-x");
+//     check.classList.remove("text-danger");
+//     isDone = true;
+//     console.log(isDone);
+//   }
+// };
+
+function createLiElement(todo) {
+  const { id, content, isDone } = todo;
+  todoUl.innerHTML += `
+   <li class="list-group-item d-flex flex-row justify-content-between" id = ${id}>
+     <button class="btn">
+       <i class="fa-solid fa-check text-success"></i>
+     </button>
+     <input type="text" class="todo-item" id="todo-item" value = ${content} disabled />
+     <button class="btn btn-warning mx-2 edit-btn" id="edit-btn">
+       EDIT
+     </button>
+     <button class="btn todo-item-delete text-danger" id="todo-item-delete">
+       <i class="fa-solid fa-trash"></i>
+     </button>
+    </li>
+  `;
+}
